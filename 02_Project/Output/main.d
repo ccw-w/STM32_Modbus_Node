@@ -24,5 +24,10 @@
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
+..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+..\..\..\output\main.o: ../Core/Inc/i2c.h
 ..\..\..\output\main.o: ../Core/Inc/gpio.h
+..\..\..\output\main.o: ../Core/Inc/oled.h
+..\..\..\output\main.o: ../Core/Inc/font.h
+..\..\..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

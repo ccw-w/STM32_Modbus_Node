@@ -18,11 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "oled.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,16 +87,19 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_Delay(20);
+  OLED_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
-    HAL_Delay(100);
+    OLED_NewFrame();
+    OLED_PrintString(0, 0, "Hello, World!", &font16x16, OLED_COLOR_NORMAL);
+    OLED_ShowFrame();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
