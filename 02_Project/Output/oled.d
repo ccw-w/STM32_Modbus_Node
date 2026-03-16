@@ -31,6 +31,8 @@
 ..\..\..\output\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 ..\..\..\output\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 ..\..\..\output\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+..\..\..\output\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+..\..\..\output\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 ..\..\..\output\oled.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 ..\..\..\output\oled.o: ../Core/Inc/i2c.h
 ..\..\..\output\oled.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

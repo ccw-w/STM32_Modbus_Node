@@ -28,10 +28,14 @@
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 ..\..\..\output\main.o: ../Core/Inc/adc.h
 ..\..\..\output\main.o: ../Core/Inc/i2c.h
+..\..\..\output\main.o: ../Core/Inc/tim.h
 ..\..\..\output\main.o: ../Core/Inc/usart.h
 ..\..\..\output\main.o: ../Core/Inc/gpio.h
 ..\..\..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\..\..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\..\..\output\main.o: ../Core/Inc/dht11.h

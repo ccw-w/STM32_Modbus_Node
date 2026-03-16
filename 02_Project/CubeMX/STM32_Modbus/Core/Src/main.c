@@ -20,6 +20,7 @@
 #include "main.h"
 #include "adc.h"
 #include "i2c.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -31,6 +32,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "dht11.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,17 +99,25 @@ int main(void)
   MX_I2C1_Init();
   MX_ADC1_Init();
   MX_USART1_UART_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   /*OLED测试代码
   HAL_Delay(20);
   OLED_Init();
   */
 
-  /*ADC测试代码*/
+  /*ADC测试代码
   int value = 0;
   float voltage = 0.0;
   char message[20] = "";
   HAL_ADCEx_Calibration_Start(&hadc1); // 校准ADC
+  */
+
+  //DHT11测试代码
+  HAL_TIM_Base_Start(&htim3); // 启动定时器用于微秒级延时
+  char message[50] = "";
+  DHT11_Data_TypeDef DHT11_Data;
+  HAL_Delay(2000); // 等待传感器稳定
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,7 +130,7 @@ int main(void)
     OLED_ShowFrame();
     */
 
-    /*ADC测试代码*/
+    /*ADC测试代码
     HAL_ADC_Start(&hadc1);
     HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
     value = HAL_ADC_GetValue(&hadc1);
@@ -128,6 +138,23 @@ int main(void)
     sprintf(message, "ADC Value: %d, Voltage: %.2fV\r\n", value, voltage);
     HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
     HAL_Delay(1000); // 每1秒读取一次ADC值
+    */
+
+    //功能测试
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // 切换LED状态
+    // HAL_Delay(1000); // 每1秒切换一次LED状态
+    // HAL_UART_Transmit(&huart1, (uint8_t*)"LED Toggled\r\n", 14, HAL_MAX_DELAY); // 发送LED状态切换消息
+
+    // DHT11测试代码
+    if(!DHT11_Read_TempAndHumidity(&DHT11_Data)) {
+      sprintf(message, "Temperature: %.1fC, Humidity: %.1f%%\r\n", DHT11_Data.temperature, DHT11_Data.humidity);
+      HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+    } else {
+      sprintf(message, "Failed to read from DHT11\r\n");
+      HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+    }
+      HAL_Delay(1000); // 每2秒读取一次DHT11数据
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
