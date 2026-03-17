@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -53,7 +54,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t Receive_Data[2] = {0};
+uint8_t Send_Data[2] = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,7 +66,15 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART1) {
+        Send_Data[0] = Receive_Data[0];
+        Send_Data[1] = Receive_Data[1];
+        HAL_UART_Transmit_IT(&huart1, Send_Data, 2); // 接收数据后立即回传
+    }
+    HAL_UART_Receive_DMA(&huart1, Receive_Data, 2);// 接收数据，使用DMA方式
+}
 /* USER CODE END 0 */
 
 /**
@@ -96,6 +106,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C1_Init();
   MX_ADC1_Init();
   MX_USART1_UART_Init();
@@ -113,11 +124,15 @@ int main(void)
   HAL_ADCEx_Calibration_Start(&hadc1); // 校准ADC
   */
 
-  //DHT11测试代码
+  /*DHT11测试代码
   HAL_TIM_Base_Start(&htim3); // 启动定时器用于微秒级延时
   char message[50] = "";
   DHT11_Data_TypeDef DHT11_Data;
   HAL_Delay(2000); // 等待传感器稳定
+  */
+  /*串口接收测试代码*/
+  HAL_UART_Receive_DMA(&huart1, Receive_Data, 2);// 接收数据，使用DMA方式
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,7 +160,7 @@ int main(void)
     // HAL_Delay(1000); // 每1秒切换一次LED状态
     // HAL_UART_Transmit(&huart1, (uint8_t*)"LED Toggled\r\n", 14, HAL_MAX_DELAY); // 发送LED状态切换消息
 
-    // DHT11测试代码
+    /*DHT11测试代码
     if(!DHT11_Read_TempAndHumidity(&DHT11_Data)) {
       sprintf(message, "Temperature: %.1fC, Humidity: %.1f%%\r\n", DHT11_Data.temperature, DHT11_Data.humidity);
       HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
@@ -154,6 +169,10 @@ int main(void)
       HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
     }
       HAL_Delay(1000); // 每2秒读取一次DHT11数据
+    */
+    /*串口接收测试代码*/
+    
+    
 
     /* USER CODE END WHILE */
 

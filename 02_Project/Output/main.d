@@ -32,6 +32,7 @@
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 ..\..\..\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 ..\..\..\output\main.o: ../Core/Inc/adc.h
+..\..\..\output\main.o: ../Core/Inc/dma.h
 ..\..\..\output\main.o: ../Core/Inc/i2c.h
 ..\..\..\output\main.o: ../Core/Inc/tim.h
 ..\..\..\output\main.o: ../Core/Inc/usart.h
