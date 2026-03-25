@@ -3,14 +3,14 @@
         {
             "name": "STM32_Modbus",
             "includePath": [
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Core\\Inc",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\CMSIS\\Include",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\MDK-ARM",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Core\\Src",
-                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\STM32F1xx_HAL_Driver\\Src"
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Core\\Inc",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\CMSIS\\Include",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\MDK-ARM",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Core\\Src",
+                "c:\\Users\\Aim\\Desktop\\STM32_Modbus_Node\\05_Backup\\V1_配置OLED\\02_Project\\CubeMX\\STM32_Modbus\\Drivers\\STM32F1xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

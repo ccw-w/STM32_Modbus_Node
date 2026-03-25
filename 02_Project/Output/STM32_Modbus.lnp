@@ -31,7 +31,8 @@
 "..\..\..\output\oled.o"
 "..\..\..\output\delay_us.o"
 "..\..\..\output\dht11.o"
-"..\..\..\output\rs485.o"
+"..\..\..\output\crc.o"
+"..\..\..\output\modbus.o"
 --strict --scatter "..\..\..\Output\STM32_Modbus.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

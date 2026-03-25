@@ -37,6 +37,10 @@
 ..\..\..\output\main.o: ../Core/Inc/tim.h
 ..\..\..\output\main.o: ../Core/Inc/usart.h
 ..\..\..\output\main.o: ../Core/Inc/gpio.h
-..\..\..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\..\..\output\main.o: ../Core/Inc/oled.h
+..\..\..\output\main.o: ../Core/Inc/font.h
 ..\..\..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\..\..\output\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\..\..\output\main.o: ../Core/Inc/dht11.h
+..\..\..\output\main.o: ../Core/Inc/modbus.h
+..\..\..\output\main.o: ../Core/Inc/CRC.h

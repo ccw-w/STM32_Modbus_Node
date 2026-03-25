@@ -27,13 +27,13 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-/*OLED测试代码
 #include "oled.h"
-*/
-
+#include "font.h"
 #include <stdio.h>
 #include <string.h>
 #include "dht11.h"
+#include "modbus.h"
+#include "CRC.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,26 +54,111 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t Receive_Data[2] = {0};
-uint8_t Send_Data[2] = {0};
+volatile uint8_t Modbus_Frame_Flag = 0;
+volatile uint16_t Modbus_RX_Length = 0;
+
+DHT11_Data_TypeDef DHT11_Data;
+
+uint16_t g_adc_value = 0;
+float g_adc_voltage = 0.0f;
+
+uint32_t g_last_sample_tick = 0;
+uint32_t g_last_oled_tick = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void Device_Data_Update(void);
+void Device_Control_Update(void);
+void Device_Alarm_Update(void);
+void OLED_Display_Update(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if (huart->Instance == USART1) {
-        Send_Data[0] = Receive_Data[0];
-        Send_Data[1] = Receive_Data[1];
-        HAL_UART_Transmit_IT(&huart1, Send_Data, 2); // 接收数据后立即回传
+    if (huart->Instance == USART1)
+    {
+        Modbus_RX_Length = 8;
+        Modbus_Frame_Flag = 1;
     }
-    HAL_UART_Receive_DMA(&huart1, Receive_Data, 2);// 接收数据，使用DMA方式
+}
+
+void Device_Data_Update(void)
+{
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+    g_adc_value = HAL_ADC_GetValue(&hadc1);
+    g_adc_voltage = (g_adc_value / 4095.0f) * 3.3f;
+
+    Modbus_Register[REG_ADC_RAW] = g_adc_value;
+    Modbus_Register[REG_ADC_VOLTAGE] = (uint16_t)(g_adc_voltage * 100);
+
+    if (DHT11_Read_TempAndHumidity(&DHT11_Data) == 0)
+    {
+        Modbus_Register[REG_TEMP_VALUE] = (uint16_t)(DHT11_Data.temperature * 10);
+        Modbus_Register[REG_HUMI_VALUE] = (uint16_t)(DHT11_Data.humidity * 10);
+        Modbus_Register[REG_SENSOR_STATE] = 0;
+    }
+    else
+    {
+        Modbus_Register[REG_TEMP_VALUE] = 0;
+        Modbus_Register[REG_HUMI_VALUE] = 0;
+        Modbus_Register[REG_SENSOR_STATE] = 1;
+    }
+}
+
+void Device_Control_Update(void)
+{
+    if (Modbus_Register[REG_LED_CTRL])
+        HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
+    else
+        HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+
+    if (Modbus_Register[REG_BEEP_CTRL])
+        HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_RESET);
+    else
+        HAL_GPIO_WritePin(BEEP_GPIO_Port, BEEP_Pin, GPIO_PIN_SET);
+}
+
+void Device_Alarm_Update(void)
+{
+    Modbus_Register[REG_ALARM_FLAG] = 0;
+
+    if (Modbus_Register[REG_TEMP_VALUE] > Modbus_Register[REG_TEMP_ALARM_HIGH])
+        Modbus_Register[REG_ALARM_FLAG] |= 0x0001;
+
+    if (Modbus_Register[REG_HUMI_VALUE] > Modbus_Register[REG_HUMI_ALARM_HIGH])
+        Modbus_Register[REG_ALARM_FLAG] |= 0x0002;
+}
+
+void OLED_Display_Update(void)
+{
+    char buf[24];
+
+    OLED_NewFrame();
+
+    sprintf(buf, "T:%d.%dC",
+            Modbus_Register[REG_TEMP_VALUE] / 10,
+            Modbus_Register[REG_TEMP_VALUE] % 10);
+    OLED_PrintString(0, 0, buf, &font16x16, OLED_COLOR_NORMAL);
+
+    sprintf(buf, "H:%d.%d%%",
+            Modbus_Register[REG_HUMI_VALUE] / 10,
+            Modbus_Register[REG_HUMI_VALUE] % 10);
+    OLED_PrintString(0, 16, buf, &font16x16, OLED_COLOR_NORMAL);
+
+    sprintf(buf, "ADC:%4d", Modbus_Register[REG_ADC_RAW]);
+    OLED_PrintString(0, 32, buf, &font16x16, OLED_COLOR_NORMAL);
+
+    sprintf(buf, "L:%d B:%d",
+            Modbus_Register[REG_LED_CTRL],
+            Modbus_Register[REG_BEEP_CTRL]);
+    OLED_PrintString(0, 48, buf, &font16x16, OLED_COLOR_NORMAL);
+
+    OLED_ShowFrame();
 }
 /* USER CODE END 0 */
 
@@ -112,68 +197,47 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  /*OLED测试代码
-  HAL_Delay(20);
+  HAL_TIM_Base_Start(&htim3);                // DHT11微秒延时用
+  HAL_ADCEx_Calibration_Start(&hadc1);       // ADC校准
+  HAL_Delay(50);
   OLED_Init();
-  */
-
-  /*ADC测试代码
-  int value = 0;
-  float voltage = 0.0;
-  char message[20] = "";
-  HAL_ADCEx_Calibration_Start(&hadc1); // 校准ADC
-  */
-
-  /*DHT11测试代码
-  HAL_TIM_Base_Start(&htim3); // 启动定时器用于微秒级延时
-  char message[50] = "";
-  DHT11_Data_TypeDef DHT11_Data;
-  HAL_Delay(2000); // 等待传感器稳定
-  */
-  /*串口接收测试代码*/
-  HAL_UART_Receive_DMA(&huart1, Receive_Data, 2);// 接收数据，使用DMA方式
-
+  Modbus_Register_Init();
+  HAL_UART_Receive_DMA(&huart1, Modbus_RX_Buffer, 8);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /*OLED测试代码
-    OLED_NewFrame();
-    OLED_PrintString(0, 0, "Hello, World!", &font16x16, OLED_COLOR_NORMAL);
-    OLED_ShowFrame();
-    */
+    if (HAL_GetTick() - g_last_sample_tick >= 1000)
+    {
+        g_last_sample_tick = HAL_GetTick();
 
-    /*ADC测试代码
-    HAL_ADC_Start(&hadc1);
-    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-    value = HAL_ADC_GetValue(&hadc1);
-    voltage = (value / 4096.0f) * 3.3f;// 假设使用12位ADC，参考电压为3.3V
-    sprintf(message, "ADC Value: %d, Voltage: %.2fV\r\n", value, voltage);
-    HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
-    HAL_Delay(1000); // 每1秒读取一次ADC值
-    */
-
-    //功能测试
-    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // 切换LED状态
-    // HAL_Delay(1000); // 每1秒切换一次LED状态
-    // HAL_UART_Transmit(&huart1, (uint8_t*)"LED Toggled\r\n", 14, HAL_MAX_DELAY); // 发送LED状态切换消息
-
-    /*DHT11测试代码
-    if(!DHT11_Read_TempAndHumidity(&DHT11_Data)) {
-      sprintf(message, "Temperature: %.1fC, Humidity: %.1f%%\r\n", DHT11_Data.temperature, DHT11_Data.humidity);
-      HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
-    } else {
-      sprintf(message, "Failed to read from DHT11\r\n");
-      HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+        // Device_Data_Update();
+         Device_Alarm_Update();
+        Device_Control_Update();
     }
-      HAL_Delay(1000); // 每2秒读取一次DHT11数据
-    */
-    /*串口接收测试代码*/
-    
-    
 
+    if (HAL_GetTick() - g_last_oled_tick >= 500)
+    {
+        g_last_oled_tick = HAL_GetTick();
+        OLED_Display_Update();
+    }
+
+    if (Modbus_Frame_Flag)
+    {
+        Modbus_Frame_Flag = 0;
+
+        if (Modbus_Server() == 1)
+            Modbus_Register[REG_COMM_STATE] = 0;
+        else
+            Modbus_Register[REG_COMM_STATE] = 1;
+
+        memset(Modbus_RX_Buffer, 0, sizeof(Modbus_RX_Buffer));
+        Modbus_RX_Length = 0;
+
+        HAL_UART_Receive_DMA(&huart1, Modbus_RX_Buffer, 8);
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

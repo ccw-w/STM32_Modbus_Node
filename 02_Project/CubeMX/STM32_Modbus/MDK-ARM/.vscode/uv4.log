@@ -1,8 +1,2 @@
-*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Build target 'STM32_Modbus'
-compiling main.c...
-linking...
-Program Size: Code=8208 RO-data=312 RW-data=20 ZI-data=2044  
-FromELF: creating hex file...
-"..\..\..\Output\STM32_Modbus.axf" - 0 Error(s), 0 Warning(s).
-Build Time Elapsed:  00:00:06
+Load "..\\..\\..\\Output\\STM32_Modbus.axf" 
+Erase Done.Programming Done.Verify OK.Flash Load finished at 21:55:03
