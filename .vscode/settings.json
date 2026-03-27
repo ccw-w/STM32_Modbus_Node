@@ -1,0 +1,17 @@
+{
+  "[c]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "[h]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
+  "clang-format.executable": "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
+  "clang-format.fallbackStyle": "LLVM",
+  "clang-format.style": "file"
+}

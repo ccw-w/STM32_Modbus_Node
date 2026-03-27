@@ -1134,6 +1134,11 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\modbus.c</FilePath>
             </File>
+            <File>
+              <FileName>param.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\param.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

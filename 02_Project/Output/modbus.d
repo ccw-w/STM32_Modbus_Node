@@ -1,5 +1,5 @@
 ..\..\..\output\modbus.o: ..\Core\Src\modbus.c
-..\..\..\output\modbus.o: ../Core/Inc/CRC.h
+..\..\..\output\modbus.o: ../Core/Inc/modbus.h
 ..\..\..\output\modbus.o: ../Core/Inc/main.h
 ..\..\..\output\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 ..\..\..\output\modbus.o: ../Core/Inc/stm32f1xx_hal_conf.h
@@ -32,6 +32,6 @@
 ..\..\..\output\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 ..\..\..\output\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 ..\..\..\output\modbus.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
-..\..\..\output\modbus.o: ../Core/Inc/modbus.h
+..\..\..\output\modbus.o: ../Core/Inc/CRC.h
 ..\..\..\output\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\..\..\output\modbus.o: ../Core/Inc/usart.h
