@@ -43,7 +43,7 @@ I (../Core/Inc/CRC.h)(0x69B97E33)
 I (../Core/Inc/dht11.h)(0x69B7EFA3)
 I (../Core/Inc/font.h)(0x6912F621)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5E8E3CC2)
-I (../Core/Inc/modbus.h)(0x69BAA171)
+I (../Core/Inc/modbus.h)(0x69C674C2)
 I (../Core/Inc/oled.h)(0x69B644CD)
 I (../Core/Inc/param.h)(0x69C66E03)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5E8E3CC2)
@@ -1011,8 +1011,8 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x69AD16A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x69AD16A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x69AD16A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h)(0x69AD16A1)
-F (..\Core\Src\modbus.c)(0x69C65D63)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_STM32_Modbus-IC:\Users\Aim\AppData\Local\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include-IC:\Users\Aim\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o ..\..\..\output\modbus.o --omf_browse ..\..\..\output\modbus.crf --depend ..\..\..\output\modbus.d)
-I (../Core/Inc/modbus.h)(0x69BAA171)
+F (..\Core\Src\modbus.c)(0x69C674C5)(--c99 -c --cpu Cortex-M3 -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_STM32_Modbus-IC:\Users\Aim\AppData\Local\Arm\Packs\ARM\CMSIS\6.2.0\CMSIS\Core\Include-IC:\Users\Aim\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="534" -D_RTE_ -DSTM32F10X_MD -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F103xB-o ..\..\..\output\modbus.o --omf_browse ..\..\..\output\modbus.crf --depend ..\..\..\output\modbus.d)
+I (../Core/Inc/modbus.h)(0x69C674C2)
 I (../Core/Inc/main.h)(0x69C2AD04)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x69AD16A1)
 I (../Core/Inc/stm32f1xx_hal_conf.h)(0x69BAAFEF)
@@ -1080,5 +1080,5 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x69AD16A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h)(0x69AD16A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h)(0x69AD16A1)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h)(0x69AD16A1)
-I (../Core/Inc/modbus.h)(0x69BAA171)
+I (../Core/Inc/modbus.h)(0x69C674C2)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5E8E3CC2)

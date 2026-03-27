@@ -4,7 +4,6 @@
 #include "string.h"
 #include "usart.h"
 
-
 uint16_t Modbus_Register[256] = {0};
 uint8_t Modbus_RX_Buffer[256] = {0};
 
