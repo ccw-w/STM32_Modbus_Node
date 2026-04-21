@@ -1,0 +1,33 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+
+.vscode/
+*.log
+*.lock
+*.tmp
+*.bak
+
+# Keil
+*.uvguix.*
+*.uvoptx
+*.scvd
+**/MDK-ARM/Objects/
+**/MDK-ARM/Listings/
+**/MDK-ARM/DebugConfig/
+**/MDK-ARM/STM32_Modbus/
+**/MDK-ARM/STM32_Modbus_FreeRTOS/
+*.axf
+*.elf
+*.hex
+*.bin
+*.map
+*.htm
+*.lst
+*.crf
+*.d
+*.o
+
+# Directory
+03_Tools/Software
+02_Project/Output/

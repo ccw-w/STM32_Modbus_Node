@@ -25,7 +25,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "modbus.h"
+#include "param.h"
+#include "usart.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,7 +60,20 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+extern void Device_Data_Update(void);
+extern void Device_Control_Update(void);
+extern void Device_Alarm_Update(void);
+extern void OLED_Display_Update(void);
 
+extern volatile uint8_t Modbus_Frame_Flag;
+extern volatile uint16_t Modbus_RX_Length;
+
+extern uint32_t g_last_sample_tick;
+extern uint32_t g_last_oled_tick;
+
+extern uint16_t g_last_slave_addr;
+extern uint16_t g_last_temp_alarm_high;
+extern uint16_t g_last_humi_alarm_high;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -115,10 +131,55 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+    for (;;) {
+      if (HAL_GetTick() - g_last_sample_tick >= 1000) {
+        g_last_sample_tick = HAL_GetTick();
+
+        Device_Data_Update();
+        Device_Alarm_Update();
+      }
+
+      /* 每次循环都更新输出，LED闪烁 */
+      Device_Control_Update();
+
+      if (HAL_GetTick() - g_last_oled_tick >= 500) {
+        g_last_oled_tick = HAL_GetTick();
+        OLED_Display_Update();
+      }
+
+      if (Modbus_Register[REG_SLAVE_ADDR] != g_last_slave_addr ||
+          Modbus_Register[REG_TEMP_ALARM_HIGH] != g_last_temp_alarm_high ||
+          Modbus_Register[REG_HUMI_ALARM_HIGH] != g_last_humi_alarm_high) {
+        g_last_slave_addr = Modbus_Register[REG_SLAVE_ADDR];
+        g_last_temp_alarm_high = Modbus_Register[REG_TEMP_ALARM_HIGH];
+        g_last_humi_alarm_high = Modbus_Register[REG_HUMI_ALARM_HIGH];
+
+        Param_RequestSave();
+      }
+
+      if (g_param_need_save && (HAL_GetTick() - g_param_save_tick >= 2000)) {
+        g_param_need_save = 0;
+        Param_SaveFromRegister();
+      }
+
+      if (Modbus_Frame_Flag) {
+        Modbus_Frame_Flag = 0;
+
+        if (Modbus_Server() == 1)
+          Modbus_Register[REG_COMM_STATE] = 0;
+        else
+          Modbus_Register[REG_COMM_STATE] = 1;
+
+        memset(Modbus_RX_Buffer, 0, sizeof(Modbus_RX_Buffer));
+        Modbus_RX_Length = 0;
+
+        HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Modbus_RX_Buffer,
+                                     sizeof(Modbus_RX_Buffer));
+        __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
+      }
+
+      osDelay(10);
+    }
   /* USER CODE END StartDefaultTask */
 }
 
