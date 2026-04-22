@@ -23,7 +23,6 @@
 #include "main.h"
 #include "task.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "modbus.h"
@@ -165,6 +164,8 @@ void StartCommTask(void *argument) {
   /* USER CODE BEGIN StartCommTask */
   /* Infinite loop */
   for (;;) {
+    osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever);
+
     if (Modbus_Frame_Flag) {
       Modbus_Frame_Flag = 0;
 
@@ -180,8 +181,6 @@ void StartCommTask(void *argument) {
                                    sizeof(Modbus_RX_Buffer));
       __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
     }
-
-    osDelay(10);
   }
   /* USER CODE END StartCommTask */
 }
