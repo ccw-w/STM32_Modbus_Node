@@ -57,6 +57,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for dataTask */
+osThreadId_t dataTaskHandle;
+const osThreadAttr_t dataTask_attributes = {
+  .name = "dataTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityNormal1,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -77,6 +84,7 @@ extern uint16_t g_last_humi_alarm_high;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void StartDataTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -110,6 +118,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
+  /* creation of dataTask */
+  dataTaskHandle = osThreadNew(StartDataTask, NULL, &dataTask_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -132,13 +143,6 @@ void StartDefaultTask(void *argument)
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
     for (;;) {
-      if (HAL_GetTick() - g_last_sample_tick >= 1000) {
-        g_last_sample_tick = HAL_GetTick();
-
-        Device_Data_Update();
-        Device_Alarm_Update();
-      }
-
       /* 每次循环都更新输出，LED闪烁 */
       Device_Control_Update();
 
@@ -181,6 +185,26 @@ void StartDefaultTask(void *argument)
       osDelay(10);
     }
   /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_StartDataTask */
+/**
+* @brief Function implementing the dataTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartDataTask */
+void StartDataTask(void *argument)
+{
+  /* USER CODE BEGIN StartDataTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    Device_Data_Update();
+    Device_Alarm_Update();
+    osDelay(1000);
+  }
+  /* USER CODE END StartDataTask */
 }
 
 /* Private application code --------------------------------------------------*/
