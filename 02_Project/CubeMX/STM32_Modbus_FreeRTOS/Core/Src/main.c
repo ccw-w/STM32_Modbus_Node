@@ -99,6 +99,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
   }
 }
 
+/* 采集传感器和 ADC 数据，并更新对应寄存器值 */
 void Device_Data_Update(void) {
   HAL_ADC_Start(&hadc1);
   HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
@@ -119,6 +120,7 @@ void Device_Data_Update(void) {
   }
 }
 
+/* 根据报警状态和控制寄存器，更新 LED 与蜂鸣器输出 */
 void Device_Control_Update(void) {
   /* LED控制 */
   if (g_temp_alarm_active ||
@@ -157,6 +159,7 @@ void Device_Control_Update(void) {
   }
 }
 
+/* 根据当前采样值和阈值，更新报警标志与报警状态 */
 void Device_Alarm_Update(void) {
   uint8_t alarm_active = 0;
 
@@ -191,6 +194,7 @@ void Device_Alarm_Update(void) {
   g_prev_alarm_active = alarm_active;
 }
 
+/* 根据当前寄存器状态刷新 OLED 显示内容 */
 void OLED_Display_Update(void) {
   char buf[50];
 
@@ -199,41 +203,41 @@ void OLED_Display_Update(void) {
   // 第1行：温度 + 温度阈值
   sprintf(buf, "T:%2d.%d", Modbus_Register[REG_TEMP_VALUE] / 10,
           Modbus_Register[REG_TEMP_VALUE] % 10);
-  OLED_PrintString(0, 0, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(0, 0, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   sprintf(buf, "TH:%2d.%d", Modbus_Register[REG_TEMP_ALARM_HIGH] / 10,
           Modbus_Register[REG_TEMP_ALARM_HIGH] % 10);
-  OLED_PrintString(64, 0, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(64, 0, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   // 第2行：湿度 + 湿度阈值
   sprintf(buf, "H:%2d.%d", Modbus_Register[REG_HUMI_VALUE] / 10,
           Modbus_Register[REG_HUMI_VALUE] % 10);
-  OLED_PrintString(0, 16, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(0, 16, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   sprintf(buf, "HH:%2d.%d", Modbus_Register[REG_HUMI_ALARM_HIGH] / 10,
           Modbus_Register[REG_HUMI_ALARM_HIGH] % 10);
-  OLED_PrintString(64, 16, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(64, 16, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   // 第3行：报警标志 + 通讯状态
   sprintf(buf, "AL:%02X", Modbus_Register[REG_ALARM_FLAG]);
-  OLED_PrintString(0, 32, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(0, 32, buf, &afont16x8, OLED_COLOR_NORMAL);
 
-  sprintf(buf, "C:%s", (Modbus_Register[REG_COMM_STATE] == 0) ? "OK" : "ER");
-  OLED_PrintString(64, 32, buf, &font16x16, OLED_COLOR_NORMAL);
+  sprintf(buf, "CRC:%s", (Modbus_Register[REG_COMM_STATE] == 0) ? "OK" : "ER");
+  OLED_PrintASCIIString(64, 32, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   // 第4行：LED状态 + 蜂鸣器状态 + 电压
   if (g_temp_alarm_active || g_humi_alarm_active)
-    sprintf(buf, "L:FLA");
+    sprintf(buf, "LED:A"); // 报警时LED强制闪烁，显示提示A
   else
-    sprintf(buf, "L:%s", Modbus_Register[REG_LED_CTRL] ? "1" : "0");
-  OLED_PrintString(0, 48, buf, &font16x16, OLED_COLOR_NORMAL);
+    sprintf(buf, "LED:%s", Modbus_Register[REG_LED_CTRL] ? "1" : "0");
+  OLED_PrintASCIIString(0, 48, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   sprintf(buf, "B:%s", Modbus_Register[REG_BEEP_CTRL] ? "1" : "0");
-  OLED_PrintString(40, 48, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(48, 48, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   // 电压
   sprintf(buf, "V:%1.1f", g_adc_voltage);
-  OLED_PrintString(80, 48, buf, &font16x16, OLED_COLOR_NORMAL);
+  OLED_PrintASCIIString(80, 48, buf, &afont16x8, OLED_COLOR_NORMAL);
 
   OLED_ShowFrame();
 }
@@ -283,10 +287,6 @@ int main(void) {
   g_last_slave_addr = Modbus_Register[REG_SLAVE_ADDR];
   g_last_temp_alarm_high = Modbus_Register[REG_TEMP_ALARM_HIGH];
   g_last_humi_alarm_high = Modbus_Register[REG_HUMI_ALARM_HIGH];
-
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Modbus_RX_Buffer,
-                               sizeof(Modbus_RX_Buffer));
-  __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
   /* USER CODE END 2 */
 
   /* Init scheduler */

@@ -160,6 +160,9 @@ void MX_FREERTOS_Init(void) {
 void StartCommTask(void *argument) {
   /* USER CODE BEGIN StartCommTask */
   /* Infinite loop */
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Modbus_RX_Buffer,
+                               sizeof(Modbus_RX_Buffer));
+  __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
   for (;;) {
     osThreadFlagsWait(0x01, osFlagsWaitAny, osWaitForever);
 
