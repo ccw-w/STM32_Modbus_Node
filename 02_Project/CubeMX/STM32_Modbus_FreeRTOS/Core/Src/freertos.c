@@ -89,9 +89,6 @@ extern void OLED_Display_Update(void);
 extern volatile uint8_t Modbus_Frame_Flag;
 extern volatile uint16_t Modbus_RX_Length;
 
-extern uint32_t g_last_sample_tick;
-extern uint32_t g_last_oled_tick;
-
 extern uint16_t g_last_slave_addr;
 extern uint16_t g_last_temp_alarm_high;
 extern uint16_t g_last_humi_alarm_high;
@@ -155,8 +152,8 @@ void MX_FREERTOS_Init(void) {
 
 /* USER CODE BEGIN Header_StartCommTask */
 /**
- * @brief  Function implementing the commTask thread.
- * @param  argument: Not used
+ * @brief 通信任务：等待串口接收事件，处理 Modbus 帧并重新开启 DMA 接收
+ * @param argument: Not used
  * @retval None
  */
 /* USER CODE END Header_StartCommTask */
@@ -187,7 +184,7 @@ void StartCommTask(void *argument) {
 
 /* USER CODE BEGIN Header_StartDataTask */
 /**
- * @brief Function implementing the dataTask thread.
+ * @brief 采集任务：周期采集传感器和 ADC 数据，并更新报警状态
  * @param argument: Not used
  * @retval None
  */
@@ -205,7 +202,7 @@ void StartDataTask(void *argument) {
 
 /* USER CODE BEGIN Header_StartDisplayTask */
 /**
- * @brief Function implementing the displayTask thread.
+ * @brief 显示任务：周期刷新 OLED 显示内容
  * @param argument: Not used
  * @retval None
  */
@@ -222,7 +219,7 @@ void StartDisplayTask(void *argument) {
 
 /* USER CODE BEGIN Header_StartCtrlTask */
 /**
- * @brief Function implementing the ctrlTask thread.
+ * @brief 控制任务：处理 LED/蜂鸣器控制，并负责参数变化检测与延时保存
  * @param argument: Not used
  * @retval None
  */

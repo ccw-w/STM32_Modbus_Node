@@ -26,7 +26,6 @@
 #include "tim.h"
 #include "usart.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "CRC.h"
@@ -66,9 +65,6 @@ DHT11_Data_TypeDef DHT11_Data;
 uint16_t g_adc_value = 0;
 float g_adc_voltage = 0.0f;
 
-uint32_t g_last_sample_tick = 0;
-uint32_t g_last_oled_tick = 0;
-
 uint8_t g_temp_alarm_active = 0;    // 温度报警激活标志
 uint8_t g_humi_alarm_active = 0;    // 湿度报警激活标志
 uint8_t g_led_blink_state = 0;      // LED当前闪烁状态
@@ -92,6 +88,7 @@ void OLED_Display_Update(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/* UART 空闲接收回调：记录接收长度并唤醒 commTask 处理 Modbus 帧 */
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
   if (huart->Instance == USART1) {
     if (Size > 0) {
