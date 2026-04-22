@@ -4,8 +4,8 @@
 #include "main.h"
 #include <stdint.h>
 
-#define PARAM_FLASH_ADDR 0x0800FC00UL
-#define PARAM_SAVE_FLAG 0xA55A
+#define PARAM_FLASH_ADDR 0x0800FC00UL // 参数断电存储地址，位于最后一个扇区
+#define PARAM_SAVE_FLAG 0xA55A        // 合法数据签名
 
 typedef struct {
   uint16_t slave_addr;
