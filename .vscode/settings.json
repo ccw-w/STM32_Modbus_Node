@@ -10,7 +10,7 @@
   },
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "editor.formatOnType": false,
+  "editor.formatOnType": true,
   "clang-format.executable": "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
   "clang-format.fallbackStyle": "LLVM",
   "clang-format.style": "file"
